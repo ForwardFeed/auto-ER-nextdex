@@ -7,8 +7,9 @@ import * as GastroAcid from './banned_gastro_acid'
 import * as Entrainement from './banned_entrainment'
 import { GameData } from '../main'
 import { getFileData } from '../utils'
-import { writeFile } from 'fs'
-import { join } from 'path'
+import * as Path from 'path-browserify'
+
+const join = Path.join
 
 export interface AdditionalData{
     banSkillSwap: string[],
@@ -50,19 +51,13 @@ function replaceWithName(data: AdditionalData, abilities: Map<string, Ability>):
     return data
 }
 
-export function getAdditionnalData(ROOT_PRJ: string, outputFile: string, gameData: GameData): Promise<undefined>{
+export function getAdditionnalData(ROOT_PRJ: string, gameData: GameData): Promise<undefined>{
     return new Promise((resolved, rejected)=>{
         getFileData(join(ROOT_PRJ, 'src/battle_util.c'), {filterComments: true, filterMacros: true, macros: new Map()})
         .then((filedata)=>{
             const data = replaceWithName(parse(filedata.data), gameData.abilities)
             const dataTowrite = JSON.stringify(data)
-            writeFile(outputFile, dataTowrite , (err_exist)=>{
-                if (err_exist){
-                    rejected(`couldn't write the gamedata output to ${outputFile}`)
-                } else {
-                    resolved(null)
-                }
-            })
+            //TODO GET THIS DATA OUT OF THERE
         })
         .catch((x)=>{
             rejected(x)

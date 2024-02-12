@@ -1,5 +1,5 @@
 
-const appName = "ERdex"
+const appName = "AutoERdex"
 const appSettings = appName + "_settings"
 const settingsVersion = "2" //when changed it will init newly added elements from default to the current settings
 const themesList =  [
@@ -40,7 +40,13 @@ export function initAppSettings(){
 }
 
 export function saveSettings(){
-    window.localStorage.setItem(appSettings, JSON.stringify(settings))
+    try{
+        window.localStorage.setItem(appSettings, JSON.stringify(settings))
+    }
+    catch(e){
+        alert("Muh data too big to fit? :3 (seriously report to the dev if this message appear)")
+    }
+    
 }
 
 export function saveToLocalstorage(key, value){
@@ -56,7 +62,9 @@ export function saveToLocalstorage(key, value){
 export function fetchFromLocalstorage(key){
     //disabled fetch from local storage if it does not support it
     if (typeof window.localStorage === 'undefined') return undefined
-    return window.localStorage.getItem(appName + key)
+    const returnedValue = window.localStorage.getItem(appName + key)
+    // sometimes it's "null" stringified, which is very fun
+    return returnedValue === "null" ? undefined : returnedValue
 }
 
 function changeTheme(){

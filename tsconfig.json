@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2020",
+    "outDir": "./static/js/fetcher/",
     "noImplicitAny": true,
-    "sourceMap": true,
-    "outDir": "target",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "module": "es6",
+    "target": "es5",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
   },
   "include": ["src/**/*"]
 }

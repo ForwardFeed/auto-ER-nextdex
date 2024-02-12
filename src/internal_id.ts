@@ -1,6 +1,8 @@
-import {join} from 'path'
+import * as Path from 'path-browserify'
 import { GameData } from './main'
 import { FileDataOptions, getFileData } from './utils'
+
+const join = Path.join
 
 export function getSpeciesInternalID(ROOT_PRJ: string, gamedata: GameData): Promise<void>{
     return new Promise((resolved, rejected) => {

@@ -234,14 +234,6 @@ export function compactify(gameData: GameData): CompactGameData{
     gameData.species.forEach((val)=>{
         const bs = val.baseStats
         let sEnc: CompactedScripted[] = []
-        if (gameData.speciesScripted.has(val.NAME)){
-            gameData.speciesScripted.get(val.NAME).forEach((value)=>{
-                sEnc.push({
-                    how: tablize(value.how, compacted.scriptedEncoutersHowT),
-                    map: tablize(value.map, compacted.mapsT)
-                })
-            })
-        }
         compacted.species.push({
             name: ((x, X)=>{
                 if (nameT.includes(x)){ // because megas are the same names as the non-megas
@@ -393,9 +385,6 @@ export function compactify(gameData: GameData): CompactGameData{
     gameData.trainers.forEach((trainer, key)=>{
         let category = Xtox('TRAINER_CLASS_', trainer.category)
         let mapName
-        if (gameData.trainersScripted.has(key)){
-            mapName = gameData.trainersScripted.get(key).map
-        }
         if (!trainer.party.length){
             return
         }

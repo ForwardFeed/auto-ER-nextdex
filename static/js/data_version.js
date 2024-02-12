@@ -1,5 +1,6 @@
 import { hydrate } from './hydrate.js'
 import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
+import { fetchGameData } from './fetcher/main.js';
 /**
  * To select which version of the game data to have
  */
@@ -11,22 +12,21 @@ export let gameData;
 const LATEST_DATA_VERSION = "1"/*%%VERSION%%*/
 
 const allVersions = [
-    "1.6.1",
-    "Alpha",
+    "master",
+    "ReduxForms",
 ]
-const defaultVersion = "1.6.1"
+const defaultVersion = allVersions[0]
+const depotURL = "https://raw.githubusercontent.com/Elite-Redux/eliteredux/"
 
 function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
     for (const version of allVersions){
         const option = document.createElement('option')
-        if (option === defaultVersion) option.prop('selected',true);
         option.value = version
         option.innerText = version
         fragment.append(option)
     }
     $('#versions').append(fragment).val(defaultVersion).change()
-
 }
 
 function changeVersion(version){
@@ -45,9 +45,8 @@ function changeVersion(version){
             return
         }
     }
-    //fetch remotely
-    fetch(`js/data/gameDataV${version}.json`)
-        .then((response) => response.json())
+    //fetch and parse remotely
+    fetchGameData({depot_url: depotURL, branch: version})
         .then((data) => {
             console.log("took gamedata from server")
             gameData = data
@@ -60,10 +59,10 @@ function changeVersion(version){
 export function setupDataVersionning(){
     setAvailableVersion()
     $('#versions').on('change', function(){
-        changeVersion($(this).val())
+        changeVersion($('#versions').val())
         saveToLocalstorage("lastusedversion", $(this).val())
     })
-    const lastUsedVersion = fetchFromLocalstorage("lastusedversion")
-    $('#versions').val(lastUsedVersion || defaultVersion).change()
+    const lastUsedVersion = fetchFromLocalstorage("lastusedversion") || defaultVersion
+    $('#versions').val(lastUsedVersion).change()
 }
 

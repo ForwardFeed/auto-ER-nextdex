@@ -1,5 +1,5 @@
-import * as FS from 'fs'
-import * as Path from 'path'
+import * as Path from 'path-browserify'
+import { getRawFile } from './utils'
 
 import { Xtox } from './parse_utils'
 import { GameData } from './main'
@@ -108,14 +108,13 @@ export function getLocations(ROOT_PRJ: string, gameData: GameData): Promise<void
     return new Promise((resolve: ()=>void, reject)=>{
          // include 'src/data/region_map/region_map_entries.h' ?
         const filepath = Path.join(ROOT_PRJ, 'src/data/wild_encounters.json')
-        FS.readFile(filepath, 'utf8', 
-            (err_exist: NodeJS.ErrnoException, data: string) => {
-                if (err_exist){
-                    reject(`Error trying to read ${filepath}`)
-                } else {
-                    gameData.locations = parse(data)
-                    resolve()
-                }
-        }) 
+        getRawFile(filepath)
+            .then((data)=>{
+                gameData.locations = parse(data)
+                resolve()
+            })
+            .catch(()=>{
+                reject(`Error trying to read ${filepath}`)
+            })
     })
 }

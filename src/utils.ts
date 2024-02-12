@@ -1,5 +1,4 @@
-import * as FS from 'fs'
-import * as Path from 'path'
+import * as Path from 'path-browserify'
 
 type Macro = string | boolean
 type MacroMap = Map<string, Macro>
@@ -35,16 +34,12 @@ export function getFileData(fullpath: string,
                             Promise<FileData> {
 
     return new Promise(function(resolve: (fileData: FileData)=> void, rejected: (reason: string)=> void){
-        FS.access(fullpath, (err_exist: NodeJS.ErrnoException)=>{
-            if (err_exist){
-                const err = `file: ${fullpath} has not been found`
-                return rejected(err)
-            } else{
-                FS.readFile(fullpath, 'utf8', (err_exist: NodeJS.ErrnoException, data: string) => {
-                    if (err_exist){
-                        const err = `couldn't read filefile: ${fullpath}, reason: ${err_exist}`
-                        return rejected(err)
-                    }
+        getRawFile(fullpath)
+            .then((x)=>{
+
+            })
+            getRawFile(fullpath)
+                .then((data)=>{
                     if (options.filterComments){
                         data = filterComments(data)
                     }
@@ -53,8 +48,10 @@ export function getFileData(fullpath: string,
                     }
                     return resolve({data: data, macros: defaultMacroMap()})
                 })
-            }    
-        });
+                .catch((err_exist)=>{
+                    const err = `couldn't read filefile: ${fullpath}, reason: ${err_exist}`
+                    return rejected(err)
+                })
     });
 }
 
@@ -262,49 +259,6 @@ function fullyResolveMacro(macros: MacroMap): MacroMap{
     }
     return macros
 }
-
-/**
- * check if all files are accessible
- * @param fullFilePathList an array of absolute path to files
- * @returns a promise of a true statement (always true if resolved)
- * or throw a rejection with the list of files not found
- * 
- */
-export function checkFiles(fullFilePathList: string[]): Promise<boolean> {
-    const promiseArray: Array<Promise<boolean>> = []
-    for (const fullFilepath of fullFilePathList){
-        promiseArray.push(new Promise(function(resolve, reject){
-            FS.access(fullFilepath, (err_exist) => {
-                if (err_exist){
-                    return reject(fullFilepath)
-                }
-                resolve(null)
-            })
-        }));
-    }
-
-    return new Promise((resolve, rejected) => {
-        Promise.allSettled(promiseArray)
-        .then((results: PromiseSettledResult<boolean>[]) => {
-            let isRejected = false
-            const rejectedList = []
-            for (const i in results){
-                const result = results[i]
-                if (result.status === "rejected") {
-                    isRejected = true
-                    rejectedList.push(fullFilePathList[i])
-                }
-            }
-            if (isRejected) {
-                return rejected(rejectedList)
-            }
-            return resolve(true)
-        })
-        .catch(() => {
-            return rejected()
-        })
-    }) 
-}
 /**
  * from a folder path "root" (ideally absolute), merge/join a list of relative files 
  * @param directory base folder to be considered
@@ -313,4 +267,27 @@ export function checkFiles(fullFilePathList: string[]): Promise<boolean> {
  */
 export function autojoinFilePath(directory: string, files: string[]): string[] {
     return files.map(file => Path.join(directory, file))
+}
+
+/**
+ * get a raw files, originally from the Github repository
+ * @param path - get
+ */
+export function getRawFile(path: string): Promise<string>{
+    return new Promise((resolved, rejected)=>{
+        fetch(path)
+        .then((body)=>{
+            body.text()
+                .then((x)=>{
+                    resolved(x)
+                })
+                .catch((e)=>{
+                    rejected(e)
+                })
+        })
+        .catch((e)=>{
+            rejected(e)
+        })
+    })
+    
 }

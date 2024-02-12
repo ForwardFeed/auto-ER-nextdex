@@ -1,7 +1,9 @@
-import { join } from "path"
+import * as Path from 'path-browserify'
 import { regexGrabNum, regexGrabStr, Xtox } from "./parse_utils"
 import { FileDataOptions, getFileData, getMulFilesData, autojoinFilePath } from "./utils"
 import { GameData } from "./main"
+
+const join = Path.join
 
 interface Description {
     ptrDesc: string,

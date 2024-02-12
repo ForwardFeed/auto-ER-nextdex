@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "postbuild": "./postbuild.sh",
+    "postbuild": "cp package.json ./static/js/fetcher/package.json && cd ./static/js/fetcher/ && npm install --only=production",
     "run": "node ./target/main.js",
     "sprites": "node ./target/main.js sprites"
   },

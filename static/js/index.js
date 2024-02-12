@@ -9,6 +9,7 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 
+
 $(document).ready(function(){
     window.onerror = function(msg, url, lineN){
         //document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
