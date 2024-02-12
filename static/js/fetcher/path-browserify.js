@@ -193,6 +193,7 @@ var posix = {
     }
     if (joined === undefined)
       return '.';
+    console.log(posix.normalize(joined))
     return posix.normalize(joined);
   },
 

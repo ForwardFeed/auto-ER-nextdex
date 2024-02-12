@@ -1,4 +1,4 @@
-Live at https://forwardfeed.github.io/ER-nextdex/static/
+Live at https://forwardfeed.github.io/auto-ER-nextdex/static/
 
 ## What is it
 A web application about the Elite Redux pokemon game, acts as a documentation. ER is made thanks to pret-pokeemerald hence all other games based on this work may reuse a significan part of this project.

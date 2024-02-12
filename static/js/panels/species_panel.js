@@ -8,6 +8,7 @@ import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
+import { depotURL, branch } from "../data_version.js"
 
 export let currentSpecieID = 1
 
@@ -199,6 +200,7 @@ function updateBaseStats(stats) {
 export function getSpritesURL(NAME) {
     NAME = NAME.replace(/^SPECIES_/, '')
     return `./sprites/${NAME}.png`
+    //return `${depotURL}${branch}/graphics/pokemon/${NAME}.png`
 }
 export function getSpritesShinyURL(NAME) {
     NAME = NAME.replace(/^SPECIES_/, '')
