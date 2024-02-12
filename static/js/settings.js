@@ -118,5 +118,5 @@ export function setupSettings(){
         frag.append(themeInput)
     }
     themeCore.append(frag)
-    $('#settings-frame').append(themeCore)
+    $('#refresh-gamedata').after(themeCore)
 }

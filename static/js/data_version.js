@@ -16,7 +16,8 @@ const allVersions = [
     "ReduxForms",
 ]
 const defaultVersion = allVersions[0]
-const depotURL = "https://raw.githubusercontent.com/Elite-Redux/eliteredux/"
+export const depotURL = "https://raw.githubusercontent.com/Elite-Redux/eliteredux/"
+export let branch = defaultVersion
 
 function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
@@ -29,14 +30,14 @@ function setAvailableVersion(){
     $('#versions').append(fragment).val(defaultVersion).change()
 }
 
-function changeVersion(version){
+function changeVersion(version, forceRefresh=false){
     if (!version || allVersions.indexOf(version) == -1){
         return console.warn(`no such version : ${version}`)
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     //deactivate fetching from localstorage for iOS product
     // as it has an unknown device, i would gladly have someone with an Apple to help me fixing it out
-    if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
+    if (!forceRefresh && savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked ){
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
         if (gameData) {
@@ -46,6 +47,7 @@ function changeVersion(version){
         }
     }
     //fetch and parse remotely
+    branch = version
     fetchGameData({depot_url: depotURL, branch: version})
         .then((data) => {
             console.log("took gamedata from server")
@@ -58,11 +60,15 @@ function changeVersion(version){
 
 export function setupDataVersionning(){
     setAvailableVersion()
+    $('#refresh-gamedata').on('click', function(){
+        changeVersion($('#versions').val(), true)
+    })
     $('#versions').on('change', function(){
         changeVersion($('#versions').val())
         saveToLocalstorage("lastusedversion", $(this).val())
     })
     const lastUsedVersion = fetchFromLocalstorage("lastusedversion") || defaultVersion
     $('#versions').val(lastUsedVersion).change()
+    
 }
 
