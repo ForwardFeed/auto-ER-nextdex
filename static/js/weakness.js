@@ -173,7 +173,6 @@ export function getDefensiveCoverage(defTypes){
     const defensiveCoverageSorted = {}
 
     gameData.typeT.forEach((type, index)=>{
-        //console.log(`${type} has effectiveness : ${defensiveCoverage[index]}`)
         const eff = defensiveCoverage[index]
         if (defensiveCoverageSorted[eff]){
             defensiveCoverageSorted[eff].push(type)

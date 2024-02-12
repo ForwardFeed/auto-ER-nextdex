@@ -16,7 +16,7 @@ const allVersions = [
     "ReduxForms",
 ]
 const defaultVersion = allVersions[0]
-export const depotURL = "https://raw.githubusercontent.com/Elite-Redux/eliteredux/"
+export const depotURL = "https:\/\/raw.githubusercontent.com/Elite-Redux/eliteredux/"
 export let branch = defaultVersion
 
 function setAvailableVersion(){

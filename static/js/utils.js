@@ -182,7 +182,6 @@ export function reorderNodeList(list, sortFn, direction = "<"){
         if (sortFn){
             clonedForReorder = structuredClone(gameData.species).sort(sortFn)
         } else {
-            console.log(sortFn)
             clonedForReorder = structuredClone(gameData.species)
         }
         if (direction === ">") clonedForReorder = clonedForReorder.reverse()

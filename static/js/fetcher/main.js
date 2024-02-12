@@ -20,7 +20,7 @@ var gameData = {
     speciesInternalID: new Map(),
 };
 export function fetchGameData(configuration) {
-    console.log(configuration)
+
     return new Promise(function (resolve, reject) {
         var ROOT_PRJ = Path.join(configuration.depot_url, configuration.branch);
         getFileData(Path.join(ROOT_PRJ, 'include/global.h'), { filterComments: true, filterMacros: true, macros: new Map() })
