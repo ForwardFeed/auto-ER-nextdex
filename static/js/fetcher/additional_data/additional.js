@@ -15,7 +15,7 @@ import * as WorrySeed from './banned_worry_seed.js';
 import * as GastroAcid from './banned_gastro_acid.js';
 import * as Entrainement from './banned_entrainment.js';
 import { getFileData } from '../utils.js';
-import Path from '../path-browserify.js';
+import * as Path from '../path-browserify.js';
 var join = Path.join;
 export function parse(fileData) {
     var lines = fileData.split('\n');

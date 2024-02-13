@@ -9,6 +9,7 @@ import * as Trainers from './trainers/trainers'
 import * as BattleItems from './battle_items/battle_items'
 import * as Additionnal from './additional_data/additional'
 import * as InternalID from './internal_id'
+import * as Sprites from './sprites'
 import { CompactGameData, compactify } from './compactify';
 
 
@@ -26,6 +27,7 @@ export interface GameData {
     mapTable: string[], 
     battleItems: Map<string, BattleItems.BattleItem>
     speciesInternalID: Map<string, number>,
+    spritesPath: Map<string, string>
 }
 
 const gameData: GameData = {
@@ -37,6 +39,7 @@ const gameData: GameData = {
     mapTable: [],
     battleItems: new Map(),
     speciesInternalID: new Map(),
+    spritesPath: new Map(),
 }
 
 export function fetchGameData(configuration: Configuration): Promise<CompactGameData>{
@@ -57,6 +60,7 @@ export function fetchGameData(configuration: Configuration): Promise<CompactGame
             promiseArray.push(Trainers.getTrainers(ROOT_PRJ, gameData))
             promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData))
             promiseArray.push(InternalID.getSpeciesInternalID(ROOT_PRJ, gameData))
+            promiseArray.push(Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, gameData))
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then((values)=>{

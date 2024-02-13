@@ -1,4 +1,4 @@
-import Path from './path-browserify.js';
+import * as Path from './path-browserify.js';
 import { getFileData } from './utils.js';
 import * as Moves from './moves.js';
 import * as Species from './species/species.js';
@@ -8,6 +8,7 @@ import * as Trainers from './trainers/trainers.js';
 import * as BattleItems from './battle_items/battle_items.js';
 import * as Additionnal from './additional_data/additional.js';
 import * as InternalID from './internal_id.js';
+import * as Sprites from './sprites.js';
 import { compactify } from './compactify.js';
 var gameData = {
     species: [],
@@ -18,9 +19,9 @@ var gameData = {
     mapTable: [],
     battleItems: new Map(),
     speciesInternalID: new Map(),
+    spritesPath: new Map(),
 };
 export function fetchGameData(configuration) {
-
     return new Promise(function (resolve, reject) {
         var ROOT_PRJ = Path.join(configuration.depot_url, configuration.branch);
         getFileData(Path.join(ROOT_PRJ, 'include/global.h'), { filterComments: true, filterMacros: true, macros: new Map() })
@@ -38,6 +39,7 @@ export function fetchGameData(configuration) {
             promiseArray.push(Trainers.getTrainers(ROOT_PRJ, gameData));
             promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData));
             promiseArray.push(InternalID.getSpeciesInternalID(ROOT_PRJ, gameData));
+            promiseArray.push(Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, gameData));
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then(function (values) {
@@ -50,7 +52,7 @@ export function fetchGameData(configuration) {
                     if (typeof result !== "object")
                         return;
                 });
-                //Additionnal.getAdditionnalData(ROOT_PRJ, gameData);
+                Additionnal.getAdditionnalData(ROOT_PRJ, gameData);
                 resolve(compactify(gameData));
             })
                 .catch(function (err) {

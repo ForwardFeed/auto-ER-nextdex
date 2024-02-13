@@ -25,7 +25,7 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-import Path from './path-browserify.js';
+import * as Path from './path-browserify.js';
 var defaultMacroMap = function () { return new Map([["TRUE", true]]); };
 var defaultFileDataOptions = {
     macros: defaultMacroMap(),
@@ -312,8 +312,6 @@ export function autojoinFilePath(directory, files) {
  * @param path - get
  */
 export function getRawFile(path) {
-    // i gave god the ugliest fix for the ugliest bug 
-    path = path.replace('https:/raw', 'https://raw')
     return new Promise(function (resolved, rejected) {
         fetch(path)
             .then(function (body) {
