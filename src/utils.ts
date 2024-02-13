@@ -274,6 +274,8 @@ export function autojoinFilePath(directory: string, files: string[]): string[] {
  * @param path - get
  */
 export function getRawFile(path: string): Promise<string>{
+    //ugliest fix for the ugliest bug
+    path = path.replace('https:/raw', 'https://raw')
     return new Promise((resolved, rejected)=>{
         fetch(path)
         .then((body)=>{
