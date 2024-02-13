@@ -40,6 +40,7 @@ function changeVersion(version, forceRefresh=false){
     if (!forceRefresh && savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked ){
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
+        branch = version
         if (gameData) {
             console.log("took gamedata from storage")
             hydrate()
@@ -47,10 +48,10 @@ function changeVersion(version, forceRefresh=false){
         }
     }
     //fetch and parse remotely
-    branch = version
     fetchGameData({depot_url: depotURL, branch: version})
         .then((data) => {
             console.log("took gamedata from server")
+            branch = version
             gameData = data
             saveToLocalstorage("data"+version, gameData)
             hydrate()
