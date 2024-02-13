@@ -25,7 +25,7 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-import * as Path from './path-browserify.js';
+import Path from './path-browserify.js';
 var defaultMacroMap = function () { return new Map([["TRUE", true]]); };
 var defaultFileDataOptions = {
     macros: defaultMacroMap(),

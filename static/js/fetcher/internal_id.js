@@ -1,4 +1,4 @@
-import * as Path from './path-browserify.js';
+import Path from './path-browserify.js';
 import { getFileData } from './utils.js';
 var join = Path.join;
 export function getSpeciesInternalID(ROOT_PRJ, gamedata) {

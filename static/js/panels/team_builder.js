@@ -42,7 +42,7 @@ class Pokemon {
         if (this.isShiny) {
             return getSpritesShinyURL(this.baseSpc.NAME)
         } else {
-            return getSpritesURL(this.baseSpc.NAME)
+            return getSpritesURL(this.baseSpc)
         }
 
     }

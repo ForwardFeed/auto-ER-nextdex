@@ -9,7 +9,7 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-import * as Path from './path-browserify.js';
+import Path from './path-browserify.js';
 import { regexGrabNum, regexGrabStr, Xtox } from "./parse_utils.js";
 import { getFileData, getMulFilesData, autojoinFilePath } from "./utils.js";
 var join = Path.join;

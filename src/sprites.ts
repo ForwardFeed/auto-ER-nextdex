@@ -1,7 +1,6 @@
 import { GameData } from "./main"
 import { regexGrabNum, regexGrabStr } from "./parse_utils"
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils"
-import { join } from "path"
 
 export interface Result{
     fileIterator: number,

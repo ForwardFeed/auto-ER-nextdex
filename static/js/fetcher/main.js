@@ -1,4 +1,4 @@
-import * as Path from './path-browserify.js';
+import Path from './path-browserify.js';
 import { getFileData } from './utils.js';
 import * as Moves from './moves.js';
 import * as Species from './species/species.js';
