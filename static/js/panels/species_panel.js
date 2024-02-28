@@ -338,7 +338,7 @@ export function createSpeciesBlock(specieId) {
         redirectSpecie(specieId)
     })
     const specie = gameData.species[specieId]
-    const img = $("<img/>").attr('src', getSpritesURL(specie.NAME))
+    const img = $("<img/>").attr('src', getSpritesURL(specie))
         .addClass("sprite")
     const name = $("<span/>").html(specie.name)
     return node.append(img).append(name)[0]

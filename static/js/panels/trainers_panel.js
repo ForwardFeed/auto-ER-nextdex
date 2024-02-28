@@ -2,12 +2,15 @@ import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_pan
 import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
+import { setFullTeam } from "./team_builder.js"
 
 const trainerParam = {
     elite: false
 }
 
+let currentTrainerID = 0
 export function feedPanelTrainers(trainerID){
+    currentTrainerID = trainerID
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
 
@@ -18,6 +21,7 @@ export function feedPanelTrainers(trainerID){
     setRematchesBar(trainer.rem)
     setInsane(trainer)
     setPartyPanel(trainer.party)
+    
 }
 
 function setDouble(double){
@@ -105,7 +109,7 @@ function setPartyPanel(party){
         }
         frag.append(pokeDiv)
     }
-    $('#trainers-team').empty().append(frag)
+    $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
 
 export function createPokemon(poke){
@@ -124,7 +128,7 @@ export function createPokemon(poke){
     if (poke.isShiny){
         pokeImg.src = getSpritesShinyURL(specie.NAME)
     } else {
-        pokeImg.src = getSpritesURL(specie.NAME)
+        pokeImg.src = getSpritesURL(specie)
     }
 
     const pokeAbility = e('div', "trainers-poke-ability", ability?.name)
@@ -137,9 +141,35 @@ export function createPokemon(poke){
     }
     const rightPanel = e('div', "trainers-pokemon-right")
     const pokeItem = e('div', "trainers-poke-item", item)
-    const pokeNature = e('div', "trainers-poke-nature", getTextNature(nature))
-    const pokeIVs = e('div',"trainers-poke-ivs", 'IVs: ' + poke.ivs.join(' '))
-    const pokeEVs = e('div', "trainers-poke-evs", 'EVs: ' + poke.evs.join(' '))
+    const textNature = getTextNature(nature)
+    const pokeNature = e('div', "trainers-poke-nature", textNature)
+    const statsOrder = [
+        "HP",
+        "Atk",
+        "Def",
+        "SpA",
+        "SpD",
+        "Spe",
+    ]
+    const pokeStats = e('div', "trainers-stats-row")
+    const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
+    const statBuffed = nerfedBuffed?.[0]
+    const statNerfed = nerfedBuffed?.[1]
+    for (const statIndex in statsOrder){
+        const stat = statsOrder[statIndex]
+        const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
+        const evVal = poke.evs[statIndex]
+        const evBuffd = evVal >= 200 ? "buffed" : ""
+        const ivVal = poke.ivs[statIndex]
+        const ivValNerfed = ivVal == 0 ? "nerfed" : ""
+        pokeStats.append(JSHAC([
+            e('div', 'trainers-stats-col'), [
+                e('div', `trainers-stats-name ${nerfedOrbuffed}`, stat),
+                e('div', `trainers-poke-ivs ${ivValNerfed}`, ivVal),
+                e('div', `trainers-poke-evs ${evBuffd}`, evVal),
+            ]
+        ]))
+    }
 
     return JSHAC([
         core, [
@@ -148,14 +178,13 @@ export function createPokemon(poke){
                 pokeImg,
                 pokeAbility
             ],
-            midPanel, [
-                pokeMoves
-            ],
             rightPanel, [
-                pokeItem,
-                pokeNature,
-                pokeIVs,
-                pokeEVs
+                midPanel, [
+                    pokeMoves,
+                    pokeItem,
+                    pokeNature
+                ],
+                pokeStats
             ]
         ]
     ])
@@ -190,6 +219,19 @@ const natureMap = {
 
 export function getTextNature(nature){
     return `${nature} (${natureMap[nature]})`
+}
+
+function getNodeRedirectToEditorPokemon(party){
+    const redirectTeamBuilder = ()=>{
+        setFullTeam(party)
+        $('#btn-species').click()
+        if ($('#btn-species').find('.big-select').text() === "Species") $('#btn-species').click()
+    }
+    return JSHAC([
+        e('div', 'trainer-go-edition',null,{onclick: redirectTeamBuilder}), [
+            e('div', 'trainer-redirect-arrow', 'Edit In Builder →')
+        ]
+    ])
 }
 
 export const queryMapTrainers = {
@@ -235,5 +277,6 @@ export function updateTrainers(searchQuery){
                 node.hide()
         }
     }
-    if (validID) feedPanelTrainers(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentTrainerID) == -1 && validID) feedPanelTrainers(validID)
 }

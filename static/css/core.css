@@ -34,7 +34,7 @@ main{
 }
 
 #top-header {
-    height: 8vh;
+    height: 8%;
     display: flex;
     align-items: center;
     box-shadow: inset 0 0 1vmax var(--shadow);
@@ -79,6 +79,9 @@ main{
     color: var(--font-color);
     user-select: none;
     cursor: pointer;
+    background-color: var(--selHover);
+    outline: none;
+    text-align: center;
 }
 
 .search-keys-wrapper {
@@ -133,7 +136,11 @@ main{
 #search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
-    cursor: pointer;
+    cursor: pointer; 
+    border: 3px solid var(--selActive);
+    border-top: 0;
+    border-collapse: collapse;
+    box-sizing: border-box;
 }
 
 #filter-icon, #settings-btn {
@@ -153,7 +160,42 @@ main{
     background-color: var(--btnHover);
 }
 
+#loading-screen{
+    position: absolute;
+    z-index: 30;
+    top: 8%;
+    width: 100%;
+    height: 92%;
+    display: flex;
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+}
 
+#loading{
+    overflow-y: scroll;
+    margin: auto;
+    width: 60%;
+    height: fit-content;
+    background-color: var(--colorA);
+}
+
+#debug{
+    margin: auto;
+    background-color: var(--colorD);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 60%;
+    overflow: scroll;
+}
+
+.loading-row{
+    display: flex;
+}
+.loading-text{
+    width: 20em;
+}
 #non-header{
     flex-grow: 1;
     display: flex;
@@ -286,10 +328,9 @@ input[type="text"] {
     aside {
         display: flex;
         flex-direction: row;
-        min-height: 8vh;
+        min-height: 8%;
         overflow: auto;
         position: sticky;
         bottom: 0;
     }
 }
-
