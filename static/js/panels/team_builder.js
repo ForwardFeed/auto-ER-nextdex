@@ -41,9 +41,9 @@ class Pokemon {
     }
     getSpritesURL() {
         if (this.isShiny) {
-            return getSpritesShinyURL(this.baseSpc)
+            return getSpritesShinyURL(this.baseSpc.NAME)
         } else {
-            return getSpritesURL(this.baseSpc)
+            return getSpritesURL(this.baseSpc.NAME)
         }
 
     }
@@ -78,6 +78,22 @@ class Pokemon {
             saveObj[val] = this[val]
         })
         return saveObj
+    }
+    toData(){
+        const dataKeysPokemon = [
+            "spc",
+            "abi",
+            "ivs",
+            "evs",
+            "item",
+            "nature",
+            "moves",
+        ]
+        const obj = {}
+        dataKeysPokemon.forEach((val) => {
+            obj[val] = this[val]
+        })
+        return obj
     }
 }
 
@@ -127,6 +143,19 @@ export function setFullTeam(party) {
     updateTeamWeaknesses()
 }
 
+function swapAndRefresh(a, b){
+    const data = []
+    for (let i = 0; i < 6; i++){
+        const poke = teamData[i]
+        if (!poke.spcName) continue
+        data.push(poke.toData())
+    }
+    const swap = structuredClone(data[a])
+    data[a] = structuredClone(data[b])
+    data[b] = swap
+    setFullTeam(data)
+}
+
 function save() {
     const saveObj = teamData.map(x => x.save())
     saveToLocalstorage("team-builder", saveObj)
@@ -160,10 +189,19 @@ export function setupTeamBuilder() {
         }
         $(this)[0].ondrop = (ev) => {
             ev.preventDefault()
-            const pokeID = ev.dataTransfer.getData("id");
-            teamData[index].init(pokeID)
-            createPokeView($(this), index)
-            updateTeamWeaknesses()
+            const pokeID = ev.dataTransfer.getData("id")
+            if (!pokeID === "") {
+                teamData[index].init(pokeID)
+                createPokeView($(this), index)
+                updateTeamWeaknesses()
+                return
+            }
+            const viewID = +ev.dataTransfer.getData("v-id")
+            swapAndRefresh(index, viewID)
+        }
+        $(this)[0].setAttribute('draggable', true);
+        $(this)[0].ondragstart = (ev) => {
+            ev.dataTransfer.setData("v-id", index)
         }
         teamView.push(new PokeNodeView($(this)))
     })
