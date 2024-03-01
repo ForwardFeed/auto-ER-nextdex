@@ -22,6 +22,24 @@
 </head>
 
 <body>
+    <link rel="stylesheet" href="./css/clown.css">
+    <div id="clown-lock">
+        <div class="clown-stock">
+            <div class="clown-bar">
+                <span>Please enter password to access the dex</span>
+            </div>
+            <div class="clown-bar-center">
+                <input class="clown-input" type="password" id="clown-input">
+            </div>
+            <div class="clown-bar">
+                <span>🇦🇱💪This is an 💪🇦🇱Albanian🇦🇱💪 lock, nobody will break it💪🇦🇱</span>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import {activateLock} from './js/clown_lock.js'
+        activateLock()
+    </script>
     <div id="top-header" class="header-gradient-ER">
         <span class="main-title">
             Elite Redux Nextdex
