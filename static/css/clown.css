@@ -21,8 +21,7 @@
     background-color: var(--background);
 }
 .clown-bar-center{
-    background-color: var(--colorA);
-    
+    background-color: var(--colorA);    
 }
 
 .clown-bar > span{
@@ -30,10 +29,22 @@
     font-size: 2vmax;
 
 }
-
+.clown-bar-pass{
+    height: 3em;
+    width: 70%;
+    margin: auto;
+}
+#clown-bad-pass{
+    margin: auto;
+    font-size: 3em;
+}
 .clown-input{
     height: 3em;
-    width: 50%;
-    margin: auto;
+    width: 70%;
     background-image: url('../icons/repost.jpg');
+}
+#clown-enter{
+    height: 3em;
+    margin: auto;
+    width: 20%;
 }
