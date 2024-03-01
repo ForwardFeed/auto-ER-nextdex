@@ -22,7 +22,7 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].onclick = () => {
         if ($('#species-front')[0].dataset.shiny === "off") {
             $('#species-front')[0].dataset.shiny = "on"
-            $('#species-front').attr('src', getSpritesShinyURL(specie.NAME))
+            $('#species-front').attr('src', getSpritesShinyURL(specie))
         } else {
             $('#species-front')[0].dataset.shiny = "off"
             $('#species-front').attr('src', getSpritesURL(specie))

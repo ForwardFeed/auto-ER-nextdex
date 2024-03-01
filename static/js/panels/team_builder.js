@@ -41,9 +41,9 @@ class Pokemon {
     }
     getSpritesURL() {
         if (this.isShiny) {
-            return getSpritesShinyURL(this.baseSpc.NAME)
+            return getSpritesShinyURL(this.baseSpc)
         } else {
-            return getSpritesURL(this.baseSpc.NAME)
+            return getSpritesURL(this.baseSpc)
         }
 
     }

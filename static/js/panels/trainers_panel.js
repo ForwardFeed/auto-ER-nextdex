@@ -126,7 +126,7 @@ export function createPokemon(poke){
     const pokeName = e('div', "trainers-poke-specie", specie.name)
     const pokeImg = e('img', "trainer-poke-sprite")
     if (poke.isShiny){
-        pokeImg.src = getSpritesShinyURL(specie.NAME)
+        pokeImg.src = getSpritesShinyURL(specie)
     } else {
         pokeImg.src = getSpritesURL(specie)
     }
