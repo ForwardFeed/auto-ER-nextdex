@@ -200,9 +200,8 @@ function updateBaseStats(stats) {
 export function getSpritesURL(specie) {
     return `${depotURL}${branch}/graphics/pokemon/${specie.sprite}`
 }
-export function getSpritesShinyURL(NAME) {
-    NAME = NAME.replace(/^SPECIES_/, '')
-    return `./sprites/SHINY_${NAME}.png`
+export function getSpritesShinyURL(specie) {
+    return `${depotURL}${branch}/graphics/pokemon/${specie.sprite.replace('front.png', 'back.png')}`
 }
 
 function changeBaseStat(node, value, statID) {
@@ -540,13 +539,12 @@ export const queryMapSpecies = {
 }
 export function updateSpecies(searchQuery) {
     const species = gameData.species
-    const nodeList = $('#species-list').children()
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
     const specieLen = species.length
     for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
-        const node = nodeList.eq(i)
+        const node = $(nodeLists.species[i - 1])
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()
@@ -554,6 +552,6 @@ export function updateSpecies(searchQuery) {
             node.hide()
         }
     }
-    // also it should apply the filters to the specie console.log(moveID, matchedMoves)
-    if (validID) feedPanelSpecies(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }
