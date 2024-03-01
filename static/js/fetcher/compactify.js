@@ -65,7 +65,8 @@ export function compactify(gameData) {
             }),
             arg: move.argument,
             desc: move.desc,
-            lDesc: move.longDesc
+            lDesc: move.longDesc,
+            id: gameData.movesInternalID.get(key)
         });
     });
     var NAMET = [];

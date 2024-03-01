@@ -32,6 +32,8 @@ var executionMap = {
                         if (context.trainers.has(context.key)) {
                             //if a trainer is already in place it means that we're in a rematch context
                             var preExistingTrainer = context.trainers.get(context.key);
+                            if (!preExistingTrainer)
+                                return;
                             preExistingTrainer.rematches[trainerNumber] = context.current;
                             context.trainers.set(context.key, preExistingTrainer);
                         }
@@ -45,15 +47,14 @@ var executionMap = {
                     }
                     else {
                         if (context.trainers.has(context.key)) {
-                            // to see why look ^
                             var preExistingTrainer = context.trainers.get(context.key);
-                            context.current.rematches = preExistingTrainer.rematches;
+                            context.current.rematches = (preExistingTrainer === null || preExistingTrainer === void 0 ? void 0 : preExistingTrainer.rematches) || [];
                         }
                         context.trainers.set(context.key, context.current);
                     }
                 }
                 else {
-                    context.trainers.set(context.key, context.current);
+                    context.trainers.set(context.key + " " + trainerNumber, context.current);
                 }
                 context.current = initBaseTrainer();
             }

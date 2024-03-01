@@ -19,6 +19,7 @@ var gameData = {
     mapTable: [],
     battleItems: new Map(),
     speciesInternalID: new Map(),
+    movesInternalID: new Map(),
     spritesPath: new Map(),
 };
 export function fetchGameData(configuration) {
@@ -40,6 +41,7 @@ export function fetchGameData(configuration) {
             promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData));
             promiseArray.push(InternalID.getSpeciesInternalID(ROOT_PRJ, gameData));
             promiseArray.push(Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, gameData));
+            promiseArray.push(InternalID.getMovesInternalID(ROOT_PRJ, gameData));
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then(function (values) {

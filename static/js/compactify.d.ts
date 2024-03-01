@@ -75,6 +75,7 @@ interface compactMove {
     arg: string;
     desc: string;
     lDesc: string;
+    id: number,
 }
 export interface CompactSpecie {
     NAME: string;

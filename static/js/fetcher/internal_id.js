@@ -19,3 +19,21 @@ export function getSpeciesInternalID(ROOT_PRJ, gamedata) {
         });
     });
 }
+export function getMovesInternalID(ROOT_PRJ, gamedata) {
+    return new Promise(function (resolved, rejected) {
+        getFileData(join(ROOT_PRJ, 'include/constants/moves.h'), { filterComments: true, filterMacros: true, macros: new Map() })
+            .then(function (filedata) {
+            var internalIDMoves = new Map();
+            filedata.macros.forEach(function (val, key) {
+                if (key.match('MOVE_')) {
+                    internalIDMoves.set(key, +val);
+                }
+            });
+            gamedata.movesInternalID = internalIDMoves;
+            resolved();
+        })
+            .catch(function (e) {
+            rejected(e);
+        });
+    });
+}

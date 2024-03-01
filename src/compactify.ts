@@ -89,6 +89,7 @@ interface compactMove {
     arg: string,
     desc: string,
     lDesc: string,
+    id: number,
 }
 export interface CompactSpecie{
     NAME: string,
@@ -223,7 +224,8 @@ export function compactify(gameData: GameData): CompactGameData{
             }),
             arg: move.argument,
             desc: move.desc,
-            lDesc: move.longDesc
+            lDesc: move.longDesc,
+            id: gameData.movesInternalID.get(key)
         })
     })
     const NAMET: string[] = []

@@ -59,6 +59,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
                         if (context.trainers.has(context.key)){ 
                             //if a trainer is already in place it means that we're in a rematch context
                             const preExistingTrainer = context.trainers.get(context.key)
+                            if (!preExistingTrainer) return
                             preExistingTrainer.rematches[trainerNumber] = context.current
                             context.trainers.set(context.key,preExistingTrainer)
                         } else {
@@ -70,15 +71,14 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
                         }
                     } else {
                         if (context.trainers.has(context.key)){
-                            // to see why look ^
                             const preExistingTrainer = context.trainers.get(context.key)
-                            context.current.rematches = preExistingTrainer.rematches
+                            context.current.rematches = preExistingTrainer?.rematches || []
                         }
                         context.trainers.set(context.key, context.current)
                         
                     }
                 } else {
-                    context.trainers.set(context.key, context.current)
+                    context.trainers.set(context.key + " " + trainerNumber, context.current)
                 }
                 context.current = initBaseTrainer()
             }
