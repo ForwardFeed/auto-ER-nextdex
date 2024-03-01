@@ -40,6 +40,6 @@ export function activateLock(){
 }
 
 function deActivateLock(){
-    document.removeEventListener('mousedown', antiHTMLRemoval)
+    document.removeEventListener('click', antiHTMLRemoval, true)
     document.getElementById('clown-lock').remove()
 }
