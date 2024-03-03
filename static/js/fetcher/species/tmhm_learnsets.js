@@ -23,10 +23,8 @@ var executionMap = {
             }
             context.currKey = regexGrabStr(line, /(?<=^\[)\w+/);
         }
-        if (line.match('TMHM')) {
-            var tmhm = regexGrabStr(line, /\w+(?=\))/);
-            if (tmhm === "0")
-                return;
+        if (line.match('MOVE_')) {
+            var tmhm = regexGrabStr(line, /(?<=TM\()\w+/);
             context.current.push(tmhm);
         }
         else if (line.match('};')) {

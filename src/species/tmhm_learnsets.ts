@@ -23,6 +23,7 @@ function initContext(): Context{
     }
 }
 
+
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
     "awaitForData": (line, context) => {
         if (line.match('gTMHMLearnsets')){
@@ -38,9 +39,8 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             }
             context.currKey = regexGrabStr(line, /(?<=^\[)\w+/)
         } 
-        if (line.match('TMHM')){
-            const tmhm = regexGrabStr(line, /\w+(?=\))/)
-            if (tmhm === "0") return
+        if (line.match('MOVE_')){
+            const tmhm = regexGrabStr(line, /(?<=TM\()\w+/)
             context.current.push(tmhm)
         } else if (line.match('};')){
             context.tmhmLearnsets.set(context.currKey, context.current)

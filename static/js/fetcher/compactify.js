@@ -167,7 +167,7 @@ export function compactify(gameData) {
             }),
             tutor: val.tutorMoves.map(function (x) {
                 if (!movesT.includes(x)) {
-                    console.warn("couldn't figure out ".concat(x, " TMHM move"));
+                    console.warn("couldn't figure out ".concat(x, " tutor move"));
                 }
                 return movesT.indexOf(x);
             }),
