@@ -86,8 +86,8 @@ var executionMap = {
                 context.currentPokemon.nature !== "") {
                 context.currentTrainer.push(context.currentPokemon);
                 context.currentPokemon = initTrainerPokemon();
-                context.execFlag = "main";
             }
+            context.execFlag = "main";
         }
     }
 };

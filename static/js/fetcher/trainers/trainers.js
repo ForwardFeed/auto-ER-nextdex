@@ -7,10 +7,18 @@ function parse(fileData) {
     var TrainerNamesResult = TrainerNames.parse(lines, 0);
     //const RematchesResult = Rematches.parse(lines, TrainerNamesResult.fileIterator)
     var TrainersTeamResult = TrainersTeam.parse(lines, TrainerNamesResult.fileIterator);
-    // put all rematches right
-    var rematchIntegratedTrainers = new Map();
     var trainers = new Map();
     TrainerNamesResult.trainers.forEach(function (value, key) {
+        if (!value)
+            return;
+        if (!value.NAME) {
+            for (var remI in value.rematches) {
+                var rem = value.rematches[remI];
+                if (rem && rem.NAME) {
+                    value = value.rematches.splice(+remI, 1)[0];
+                }
+            }
+        }
         trainers.set(value.NAME, {
             name: key,
             category: value.category,
