@@ -5,7 +5,7 @@ import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
-
+import { initFormatShowdown } from "./format_showdown.js"
 
 export const nodeLists = {
     species: [],
@@ -42,6 +42,7 @@ export function hydrate() {
     }
 
     // hydrate the UI with the data
+    initFormatShowdown()
     hydrateAbilities()
     hydrateMoves()
     hydrateSpecies()
@@ -207,7 +208,7 @@ function hydrateSpecies() {
         image.loading = "lazy"
         row.appendChild(image)
 
-        const name = e('span', "species-name", spec.name)
+        const name = e('span', "species-name span-a", spec.name)
         row.append(name)
         row.dataset.id = i
         $(row).on('click', function () {

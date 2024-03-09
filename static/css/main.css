@@ -117,6 +117,9 @@
 
 span{
     height: fit-content;
+}
+
+.span-a{
     margin: auto 0;
 }
 
@@ -342,9 +345,6 @@ span{
 #species-front:hover, #species-coverage:hover, #species-basestats:hover, #species-name:hover
 ,#moves-name:hover{
     box-shadow: inset 2px 0px 10px var(--font-color);
-}
-#species-front:hover{
-    box-shadow: inset 2px 0px 10px brown;
 }
 .species-abi-inn{
     display: flex;
@@ -991,3 +991,4 @@ span{
         width: 100vw;
     }
 }
+

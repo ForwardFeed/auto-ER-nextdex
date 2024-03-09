@@ -8,6 +8,7 @@ import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
+import { setupFormatShowdown } from "./format_showdown.js"
 
 
 $(document).ready(function(){
@@ -20,6 +21,7 @@ $(document).ready(function(){
     setupMoves()
     setupSpeciesPanel()
     setupTeamBuilder() // the team builder BEFORE data version is Important
+    setupFormatShowdown()
     setupDataVersionning()
     setupSearch()
     setupFilters()

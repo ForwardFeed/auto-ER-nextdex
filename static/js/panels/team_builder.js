@@ -196,6 +196,7 @@ export function setupTeamBuilder() {
                 updateTeamWeaknesses()
                 return
             }
+            if (ev.target.className === "builder-placeholder") return
             const viewID = ev.dataTransfer.getData("v-id")
             if (viewID !== ""){
                 swapAndRefresh(index, +viewID)
