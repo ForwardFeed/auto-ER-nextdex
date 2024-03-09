@@ -268,7 +268,7 @@ function setInnates(innates) {
 }
 
 function abilitiesExtraType(abilityID, specie) {
-    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
+    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns].filter(x => x))
 }
 
 export function setupSpeciesPanel() {
