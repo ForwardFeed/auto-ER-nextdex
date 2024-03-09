@@ -494,17 +494,26 @@ export function setupReorderBtn() {
     return row
 }
 
+function buildResist(specie){
+    const types = [...new Set(specie.stats.types), abilitiesExtraType(0, specie)]
+    const weaknesses = getDefensiveCoverage(
+        types.map(x => gameData.typeT[x]).filter(x => x), [specie.stats.abis[0], ...specie.stats.inns].filter(x => x)
+    )
+    specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))].filter(x => x)
+}
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
         if (AisInB(queryData, specieName)) {
-            return [queryData === specieName, specie.name, true]
+            return specie.name
         }
     },
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
+        if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
         for (const type of types) {
-            if (AisInB(queryData, type)) return type
+            if (AisInB(queryData, type)) return type   
         }
         return false
     },
@@ -523,18 +532,27 @@ export const queryMapSpecies = {
     },
     "move": (queryData, specie) => {
         let moves = specie.allMoves?.map((x) => gameData.moves[x].name.toLowerCase()) || []
+        let isUnperfectMatch = false
         for (const move of moves) {
             if (AisInB(queryData, move)) {
-                return [queryData === move, move, false]
+                if (queryData === move) return [true, move, false]
+                isUnperfectMatch = move
             }
         }
-        return false
+        return isUnperfectMatch
     },
     "region": (queryData, specie) => {
         const specieRegion = specie.region?.toLowerCase() || ""
         if (AisInB(queryData, specieRegion)) {
             return specie.region
         }
+    },
+    "resist": (queryData, specie) => {
+        if (!specie.resist) buildResist(specie)
+        for (const typeR of specie.resist){
+            if (AisInB(queryData.toLowerCase(), typeR.toLowerCase())) return typeR
+        }
+        return false
     },
 }
 export function updateSpecies(searchQuery) {
