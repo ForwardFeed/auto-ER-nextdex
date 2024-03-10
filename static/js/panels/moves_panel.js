@@ -5,8 +5,9 @@ import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
 
 export let matchedMoves
-
+let currentMoveID = 0
 export function feedPanelMoves(moveID) {
+    currentMoveID = moveID
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
     $('#moves-internal-id').text(`ingame ID: ${move.id}`)
