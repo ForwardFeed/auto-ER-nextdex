@@ -1,7 +1,7 @@
 
 const appName = "AutoERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "2" //when changed it will init newly added elements from default to the current settings
+const settingsVersion = "3" //when changed it will init newly added elements from default to the current settings
 const themesList =  [
     "blueish",
     "rushed",
@@ -16,6 +16,7 @@ const defaultSettings = {
     settingsVersion: settingsVersion,
     theme: "blueish",
     storageEnable: true,
+    monotype: false,
 }
 
 export function initAppSettings(){
@@ -94,6 +95,15 @@ export function setupSettings(){
         saveSettings()
     })
     if (!settings.storageEnable) $('#disable-storage').attr('checked', true)
+    $('#enable-monotype').on('change', ()=>{
+        settings.monotype = true
+        saveSettings()
+    })
+    $('#disable-monotype').on('change', ()=>{
+        settings.monotype = false
+        saveSettings()
+    })
+    if (settings.monotype) $('#enable-monotype').attr('checked', true)
     const toUpperCaseFirst = (word)=>{
         return word.charAt(0).toUpperCase() + word.slice(1)
     }

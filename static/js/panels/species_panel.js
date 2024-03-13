@@ -9,6 +9,7 @@ import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
 import { depotURL, branch } from "../data_version.js"
+import { settings } from "../settings.js"
 
 export let currentSpecieID = 1
 
