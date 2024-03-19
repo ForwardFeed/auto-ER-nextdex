@@ -409,7 +409,7 @@ function feedPokemonEdition(jNode, viewID) {
     }
     const itemCallback = (itemID) => {
         poke.item = itemID
-        view.item.text(itemDiv.innerText = gameData.items[itemID].name)
+        view.item.text(itemDiv.innerText = gameData.itemT[itemID])
         save()
     }
     const natureCallback = (natureID) => {

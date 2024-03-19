@@ -42,13 +42,13 @@ export function hydrate() {
     }
 
     // hydrate the UI with the data
+    hydrateItems()
     initFormatShowdown()
     hydrateAbilities()
     hydrateMoves()
     hydrateSpecies()
     hydrateLocation()
     hydrateTrainers()
-    hydrateItems()
     restoreSave() // also restore the save of the team builder
 }
 

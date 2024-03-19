@@ -118,7 +118,7 @@ export function createPokemon(poke){
     const moves = poke.moves.map((x)=>{
         return gameData.moves[x]
     })
-    const item = gameData.items[poke.item]?.name
+    const item = gameData.itemT[poke.item]
     const nature = gameData.natureT[poke.nature]
 
     const core = e('div', "trainers-pokemon")

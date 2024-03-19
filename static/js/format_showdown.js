@@ -10,24 +10,38 @@ const statsN = [
 ]
 
 
-function parseData(){
-    const text = $('#showdown-text').val()
+export function parseShowdownFormat(text){
     const lines = text.split('\n')
     const party = []
     let poke = {
-        moves: []
+        moves: [],
+        notes: "",
+        ivs: [31,31,31,31,31,31],
+        evs: [0,0,0,0,0,0],
     }
     let parsePtr = 0
     const next = () => {
         parsePtr += 1
     }
+    let sameLineNextStepFlag = false
+    const sameLineNextStep = () => {
+        sameLineNextStepFlag = true
+        next()
+    }
     let invalid = false
     const parseSteps = [
+        (line)=>{
+            if (!line.match(/^#/)){
+                return sameLineNextStep()
+            }
+            poke.name = line.replace(/^# /, '')
+            next()
+        },
         (line)=>{
             const spcItem = line.split(' @ ')
             poke.spc = spcNameList.indexOf(spcItem[0])
             if (poke.spc == -1) invalid = true //
-            if (spcItem[1] != undefined) poke.item = gameData.itemT[spcItem[1]]
+            if (spcItem[1] != undefined) poke.item = gameData.itemT.indexOf(spcItem[1])
             next()
         },
         (line)=>{
@@ -42,12 +56,9 @@ function parseData(){
         },
         (line)=>{
             if (!line.match(/^EVS: /)) {
-                poke.evs = [0,0,0,0,0,0]
-                next()
-                parseSteps[parsePtr](line)
-                return
+                return sameLineNextStep()
             }
-            const evsText = line.replace(/^EVS: /, '')
+            const evsText = line.replace(/^EVS: /, '').split(' / ')
             for (const ev of evsText){
                 const t = ev.split(' ')
                 poke.evs[statsN.indexOf(t[1])] = t[0]
@@ -56,10 +67,7 @@ function parseData(){
         },
         (line)=>{
             if (!line.match(/^IVS: /)) {
-                poke.ivs = [31,31,31,31,31,31]
-                next()
-                parseSteps[parsePtr](line)
-                return
+                return sameLineNextStep()
             }
             const ivsText = line.replace(/^IVS: /, '').split(' / ')
             for (const iv of ivsText){
@@ -69,16 +77,26 @@ function parseData(){
             next()
         },
         (line)=>{
+            if (!line.match(/^- /)) {
+                return sameLineNextStep()
+            }
             const moveName = line.replace(/- /, '')
             poke.moves.push(moveNameList.indexOf(moveName))
         },
+        (line)=>{
+            if (!line.match(/\/\//)) return next()
+            poke.notes += line.replace(/^\/\//, '') + "\n"
+        }
     ]
     for (const line of lines){
         if (!line) {
             invalid = false
             party.push(poke)
             poke = {
-                moves: []
+                moves: [],
+                notes: "",
+                ivs: [31,31,31,31,31,31],
+                evs: [0,0,0,0,0,0],
             }
             parsePtr = 0
             continue
@@ -86,28 +104,36 @@ function parseData(){
         if (invalid) continue
         try{
             parseSteps[parsePtr](line)
+            while(sameLineNextStepFlag){
+                sameLineNextStepFlag = false
+                parseSteps[parsePtr](line)
+            }
         } catch(e){
-            //console.warn(e, line)
+            console.warn(e, line)
         }
     }
-    setFullTeam(party)
+    return party
 }
 
 function getAbi(spc, abiD){
     return abiNameList[gameData.species[spc].stats.abis[abiD]]
 }
-function showData(){
+
+export function exportDataShowdownFormat(party){
     let text = []
-    for (const poke of teamData){
+    for (const poke of party){
         if (!poke.spc) continue
-        const item = gameData.itemT[poke.item] 
-        text.push(`${spcNameList[poke.spc]}${item?` @ ${item}`:""}
+        const item = gameData.itemT[poke.item]
+        poke.evs.splice(6)
+        text.push(`${poke.name?`# ${poke.name}\n`:""}\
+${spcNameList[poke.spc]}${item?` @ ${item}`:""}
 Level: 1
 ${gameData.natureT[poke.nature]} Nature
 Ability: ${getAbi(poke.spc, poke.abi)}
 ${`EVS: ${poke.evs.map((x, i) => x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/EVS: $/, '')}
-${`IVS: ${poke.ivs.map((x, i) => !x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
+${`IVS: ${poke.ivs.map((x, i) => !+x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
 ${poke.moves.map(x => moveNameList[x]).filter(x => x != "-").map(x => `- ${x}`).join('\n')}
+${poke.notes ? `${poke.notes.split('\n').map(x =>`//${x}\n`).join('')}` : ''}
 `.replace(/\n[\n]+/g, '\n'))
     }
     return text.join('\n')
@@ -124,11 +150,11 @@ function showFormatWindow(ev){
     })
     const right = e('div', 'showdown-right')
     const rightTop = e('div', 'showdown-top')
-    const text = showData()
+    const text = exportDataShowdownFormat(teamData)
     const rightBot = e('pre', 'showdown-bot', text)
     const bottomConfirm = e('div', 'showdown-confirm btn-btn-hover', null, {
         onclick: (ev_cb)=>{
-            parseData()
+            setFullTeam(parseShowdownFormat($('#showdown-text').val()))
             bottomConfirm.style.display = "none"
             removeInformationWindow(ev_cb, true)
         }
